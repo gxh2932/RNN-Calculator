@@ -71,7 +71,7 @@ By choosing
 W = \begin{bmatrix} 0 & 1 & 0 \\ 0 & 1 & 0 \\ 0 & 1 & 0 \end{bmatrix}
 ```
 
-the product $Wh_t$ has two possible values:
+the product $Wh_t$ has two possible values (the reasoning behind the $h_t$ values will be explained shortly):
 
 ```math
 \begin{bmatrix} 0 & 1 & 0 \\ 0 & 1 & 0 \\ 0 & 1 & 0 \end{bmatrix} \begin{bmatrix}0 \\ 0 \\ 0 \end{bmatrix} = \begin{bmatrix}0 \\ 0 \\ 0 \end{bmatrix},
