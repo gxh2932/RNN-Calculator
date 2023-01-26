@@ -14,11 +14,11 @@ def rnn_addition(x):
     W = np.asarray([(0, 1, 0), (0, 1, 0), (0, 1, 0)])
 
     if sum(x[0]) == 0:
-        h_0 = np.asarray(([0, 0, 0]))
+        h_0 = np.asarray(([0, 0, 0]))   # zero at position 0 and no carry
     elif sum(x[0]) == 1:
-        h_0 = np.asarray(([1, 0, 0]))
+        h_0 = np.asarray(([1, 0, 0]))   # one at position 0 and no carry
     else:
-        h_0 = np.asarray(([1, 1, 0]))
+        h_0 = np.asarray(([1, 1, 0]))   # zero at position 0 and carry
 
     b_h = np.asarray([0, -1, -2])
 
