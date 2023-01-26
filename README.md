@@ -1,7 +1,3 @@
-<p align="center">
-  <img src="https://user-images.githubusercontent.com/29025503/214755229-f95b1ade-295b-461a-b7c3-74441ec32088.png" alt="Sublime's custom image"/>
-</p>
-
 Recurrent neural networks (RNNs) are universal Turing machines. This means that we can perform basic arithmetic using their architecture. The following is a toy example of how RNNs can be constructed to perform addition with handcrafted parameters.
 
 The input to the RNN will be two binary numbers, starting with the *least* significant bit. The longest binary number will be padded with an additional zero on the left side and the other number will also be padded with zeros such that they are both the same length. For instance, the equation
