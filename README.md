@@ -105,4 +105,8 @@ and then solve. Once we have found a solution for the system we then turn our at
 \sigma\left(\begin{bmatrix}v_1 ,v_2, v_3 \end{bmatrix} \begin{bmatrix}1 \\ 1 \\ 1 \end{bmatrix} + b_y\right) = 1.
 ```
 
-There exist an infinite number of possible solutions that satisfy the restraints in our system but we settled with the parameters we defined above.
+There exist an infinite number of possible solutions that satisfy our two systems of equations but we settled with the parameters we defined above:
+
+```math
+U = \begin{bmatrix}1 & 1 \\ 1 & 1 \\ 1 & 1 \end{bmatrix}, W = \begin{bmatrix} 0 & 1 & 0 \\ 0 & 1 & 0 \\ 0 & 1 & 0 \end{bmatrix}, b_h = \begin{bmatrix}0 \\ -1 \\ -2 \end{bmatrix}, v = \begin{bmatrix}1 \\ -1 \\ 1 \end{bmatrix}, b_y = 0.
+```
