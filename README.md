@@ -30,8 +30,8 @@ The equations for the network are given by
 
 $$
 \begin{aligned}
-& y_t=\sigma\left(\mathbf{v}^T \mathbf{h}_t+b_y\right) \\
-& \mathbf{h}_t=\sigma\left(\mathbf{U x}_t+\mathbf{W} \mathbf{h}_{t-1}+\mathbf{b}_{\mathbf{h}}\right)
+& \mathbf{h}_t=\sigma\left(\mathbf{U x}_t+\mathbf{W} \mathbf{h}_{t-1}+\mathbf{b}_{\mathbf{h}}\right) \\
+& y_t=\sigma\left(\mathbf{v}^T \mathbf{h}_t+b_y\right)
 \end{aligned}
 $$
 
@@ -45,62 +45,7 @@ U = \begin{bmatrix}1 & 1 \\ 1 & 1 \\ 1 & 1 \end{bmatrix}, W = \begin{bmatrix} 0 
 
 The philosophy behind our parameter selection is to create a system in which the hidden state can take on four possible states. These states represent two pieces of information: the resulting bit at the current position and if we need to carry a bit to the next state. Since there are two possible values for the bit (0 or 1) and two possible answers to whether we carry a bit to the next state (True of False) then it's clear why we have four possible states for $h_t$ since $2\times2=4$.
 
-By choosing 
-
-```math
-U = \begin{bmatrix}1 & 1 \\ 1 & 1 \\ 1 & 1 \end{bmatrix}
-```
-
-the product $Ux_t$ has three possible values:
-
-```math
-\begin{bmatrix}1 & 1 \\ 1 & 1 \\ 1 & 1 \end{bmatrix} \begin{bmatrix}0 \\ 0 \end{bmatrix} = \begin{bmatrix}0 \\ 0 \\ 0 \end{bmatrix},
-```
-
-```math
-\begin{bmatrix}1 & 1 \\ 1 & 1 \\ 1 & 1 \end{bmatrix} \begin{bmatrix}1 \\ 0 \end{bmatrix} = \begin{bmatrix}1 \\ 1 \\ 1 \end{bmatrix},
-```
-
-```math
-\begin{bmatrix}1 & 1 \\ 1 & 1 \\ 1 & 1 \end{bmatrix} \begin{bmatrix}1 \\ 1 \end{bmatrix} = \begin{bmatrix}2 \\ 2 \\ 2 \end{bmatrix}.
-```
-
-By choosing 
-
-```math
-W = \begin{bmatrix} 0 & 1 & 0 \\ 0 & 1 & 0 \\ 0 & 1 & 0 \end{bmatrix}
-```
-
-the product $Wh_t$ has two possible values (the reasoning behind the $h_t$ values will be explained shortly):
-
-```math
-\begin{bmatrix} 0 & 1 & 0 \\ 0 & 1 & 0 \\ 0 & 1 & 0 \end{bmatrix} \begin{bmatrix}0 \\ 0 \\ 0 \end{bmatrix} = \begin{bmatrix}0 \\ 0 \\ 0 \end{bmatrix},
-```
-
-```math
-\begin{bmatrix} 0 & 1 & 0 \\ 0 & 1 & 0 \\ 0 & 1 & 0 \end{bmatrix} \begin{bmatrix}1 \\ 0 \\ 0 \end{bmatrix} = \begin{bmatrix}0 \\ 0 \\ 0 \end{bmatrix},
-```
-
-```math
-\begin{bmatrix} 0 & 1 & 0 \\ 0 & 1 & 0 \\ 0 & 1 & 0 \end{bmatrix} \begin{bmatrix}1 \\ 1 \\ 0 \end{bmatrix} = \begin{bmatrix}1 \\ 1 \\ 1 \end{bmatrix},
-```
-
-```math
-\begin{bmatrix} 0 & 1 & 0 \\ 0 & 1 & 0 \\ 0 & 1 & 0 \end{bmatrix} \begin{bmatrix}1 \\ 1 \\ 1 \end{bmatrix} = \begin{bmatrix}1 \\ 1 \\ 1 \end{bmatrix}.
-```
-
-Following this, the sum $Ux_t + Wh_t$ can take on four possible values: 
-```math
-\begin{bmatrix}0 \\ 0 \\ 0 \end{bmatrix}, \begin{bmatrix}1 \\ 1 \\ 1 \end{bmatrix}, \begin{bmatrix}2 \\ 2 \\ 2 \end{bmatrix}, \begin{bmatrix}3 \\ 3 \\ 3 \end{bmatrix}.
-```
-
-This sum when paired with the bias term $b_f$ gives us four possible values for the expression $Ux_t + Wh_t + b_f$ inside the activation function: 
-
-```math
-\begin{bmatrix}0 \\ -1 \\ -2 \end{bmatrix}, \begin{bmatrix}1 \\ 0 \\ -1 \end{bmatrix}, \begin{bmatrix}2 \\ 1 \\ 0 \end{bmatrix}, \begin{bmatrix}3 \\ 2 \\ 1 \end{bmatrix}.
-```
-
-Once passed through the activation function, the four possible states are as follows:
+We found the values for our parameters by first defining our possible states and then building from that. We define the four possible states are as follows:
 
 ```math
 \begin{bmatrix}0 \\ 0 \\ 0 \end{bmatrix}, \begin{bmatrix}1 \\ 0 \\ 0 \end{bmatrix}, \begin{bmatrix}1 \\ 1 \\ 0 \end{bmatrix}, \begin{bmatrix}1 \\ 1 \\ 1 \end{bmatrix}.
@@ -108,27 +53,56 @@ Once passed through the activation function, the four possible states are as fol
 
 These four possible states represent the following instructions respectively: 0 at the current position and do not carry a 1 to the next state, 1 at the current position and do not carry a 1 to the next state, 0 at the current position and do carry a 1 to the next state, and 1 at the current position and do carry a 1 to the next state. The reason why we need the option to carry a bit to the next state is because of the case where the sum of the bits at the current position exceeds 1. This is necessary because in binary, the only two possible values for a bit are 0 and 1, so when two 1s are added together, the result is greater than 1 and must be represented by a carry bit.
 
-Now that we have constructed a way for the states to represent what we want, now we want to create a function that can interpret the instructions from the hidden state such that we output the desired value at the given position. By defining $v$ as 
+Now that we have defined our states, we must now find values for $U$, $W$, and $b_h$ such that $h_t$ takes on the proper state given the previous state $h_{t-1}$. To do this, you construct a system of matrix equations with every combination of $x_t$ and $h_t$ as follows:
 
 ```math
-v = \begin{bmatrix}1 \\ -1 \\ 1 \end{bmatrix}
-```
-and $b_y = 0$ then $y_t=\sigma\left(\mathbf{v}^T \mathbf{h}_t+b_y\right)$ will either output $0$ or $1$ based on the instructions from the hidden state as can be seen here:
-
-```math
-\sigma\left(\begin{bmatrix}1 ,-1, 1 \end{bmatrix} \begin{bmatrix}0 \\ 0 \\ 0 \end{bmatrix} + 0\right) = 0
+\sigma \left(\begin{bmatrix}u_{11} & u_{12} \\ u_{21} & u_{22} \\ u_{31} & u_{32} \end{bmatrix} \begin{bmatrix}0 \\ 0 \end{bmatrix} + \begin{bmatrix} w_{11} & w_{12} & w_{13} \\ w_{21} & w_{22} & w_{23} \\ w_{31} & w_{32} & w_{33} \end{bmatrix} \begin{bmatrix}0 \\ 0 \\ 0 \end{bmatrix} + \begin{bmatrix}b_1 \\ b_2 \\ b_3 \end{bmatrix} \right) = \begin{bmatrix}0 \\ 0 \\ 0 \end{bmatrix}
 ```
 
 ```math
-\sigma\left(\begin{bmatrix}1 ,-1, 1 \end{bmatrix} \begin{bmatrix}1 \\ 0 \\ 0 \end{bmatrix} + 0\right) = 1
+\sigma \left(\begin{bmatrix}u_{11} & u_{12} \\ u_{21} & u_{22} \\ u_{31} & u_{32} \end{bmatrix} \begin{bmatrix}0 \\ 0 \end{bmatrix} + \begin{bmatrix} w_{11} & w_{12} & w_{13} \\ w_{21} & w_{22} & w_{23} \\ w_{31} & w_{32} & w_{33} \end{bmatrix} \begin{bmatrix}1 \\ 0 \\ 0 \end{bmatrix} + \begin{bmatrix}b_1 \\ b_2 \\ b_3 \end{bmatrix} \right) = \begin{bmatrix}0 \\ 0 \\ 0 \end{bmatrix}
 ```
 
 ```math
-\sigma\left(\begin{bmatrix}1 ,-1, 1 \end{bmatrix} \begin{bmatrix}1 \\ 1 \\ 0 \end{bmatrix} + 0\right) = 0
+\cdots
 ```
 
 ```math
-\sigma\left(\begin{bmatrix}1 ,-1, 1 \end{bmatrix} \begin{bmatrix}1 \\ 1 \\ 1 \end{bmatrix} + 0\right) = 1.
+\sigma \left(\begin{bmatrix}u_{11} & u_{12} \\ u_{21} & u_{22} \\ u_{31} & u_{32} \end{bmatrix} \begin{bmatrix}1 \\ 0 \end{bmatrix} + \begin{bmatrix} w_{11} & w_{12} & w_{13} \\ w_{21} & w_{22} & w_{23} \\ w_{31} & w_{32} & w_{33} \end{bmatrix} \begin{bmatrix}1 \\ 0 \\ 0 \end{bmatrix} + \begin{bmatrix}b_1 \\ b_2 \\ b_3 \end{bmatrix} \right) = \begin{bmatrix}1 \\ 0 \\ 0 \end{bmatrix}
 ```
 
-Note that the exact values of our parameters are not what matter due to the existence of the activation function. What matters is that they are defined in such a way that the logic of the system is maintained. For example, if we multiplied $U$, $W$, and $b_h$ by the same **positive** scalar (multiplication by a non-positive scalar would disrupt the logic of the system) it would not change the output of the calculator since the output from the activation function would be the same.
+```math
+\sigma \left(\begin{bmatrix}u_{11} & u_{12} \\ u_{21} & u_{22} \\ u_{31} & u_{32} \end{bmatrix} \begin{bmatrix}1 \\ 0 \end{bmatrix} + \begin{bmatrix} w_{11} & w_{12} & w_{13} \\ w_{21} & w_{22} & w_{23} \\ w_{31} & w_{32} & w_{33} \end{bmatrix} \begin{bmatrix}1 \\ 1 \\ 0 \end{bmatrix} + \begin{bmatrix}b_1 \\ b_2 \\ b_3 \end{bmatrix}\right) = \begin{bmatrix}1 \\ 1 \\ 1 \end{bmatrix}
+```
+
+```math
+\cdots
+```
+
+```math
+\sigma \left(\begin{bmatrix}u_{11} & u_{12} \\ u_{21} & u_{22} \\ u_{31} & u_{32} \end{bmatrix} \begin{bmatrix}1 \\ 1 \end{bmatrix} + \begin{bmatrix} w_{11} & w_{12} & w_{13} \\ w_{21} & w_{22} & w_{23} \\ w_{31} & w_{32} & w_{33} \end{bmatrix} \begin{bmatrix}1 \\ 1 \\ 0 \end{bmatrix} + \begin{bmatrix}b_1 \\ b_2 \\ b_3 \end{bmatrix} \right) = \begin{bmatrix}1 \\ 1 \\ 1 \end{bmatrix}
+```
+
+```math
+\sigma \left(\begin{bmatrix}u_{11} & u_{12} \\ u_{21} & u_{22} \\ u_{31} & u_{32} \end{bmatrix} \begin{bmatrix}1 \\ 1 \end{bmatrix} + \begin{bmatrix} w_{11} & w_{12} & w_{13} \\ w_{21} & w_{22} & w_{23} \\ w_{31} & w_{32} & w_{33} \end{bmatrix} \begin{bmatrix}1 \\ 1 \\ 1 \end{bmatrix} + \begin{bmatrix}b_1 \\ b_2 \\ b_3 \end{bmatrix} \right) = \begin{bmatrix}1 \\ 1 \\ 1 \end{bmatrix}
+```
+
+and then solve. Once we have found a solution for the system we then turn our attention from $h_t$ and construct a system of equations for $y_t$. Our system of equations will need to account for each state $h_t$ and so we construct the system as follows:
+
+```math
+\sigma\left(\begin{bmatrix}v_1 ,v_2, v_3 \end{bmatrix} \begin{bmatrix}0 \\ 0 \\ 0 \end{bmatrix} + b_y\right) = 0
+```
+
+```math
+\sigma\left(\begin{bmatrix}v_1 ,v_2, v_3 \end{bmatrix} \begin{bmatrix}1 \\ 0 \\ 0 \end{bmatrix} + b_y\right) = 1
+```
+
+```math
+\sigma\left(\begin{bmatrix}v_1 ,v_2, v_3 \end{bmatrix} \begin{bmatrix}1 \\ 1 \\ 0 \end{bmatrix} + b_y\right) = 0
+```
+
+```math
+\sigma\left(\begin{bmatrix}v_1 ,v_2, v_3 \end{bmatrix} \begin{bmatrix}1 \\ 1 \\ 1 \end{bmatrix} + b_y\right) = 1.
+```
+
+There exist an infinite number of possible solutions that satisfy the restraints in our system but we settled with the parameters we defined above.
