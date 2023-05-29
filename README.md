@@ -28,12 +28,12 @@ The RNN has three hidden units, and all of the units use the following non-diffe
 
 The equations for the network are given by
 
-$$
+```math
 \begin{aligned}
 & \mathbf{h}_t=\sigma\left(\mathbf{U x}_t+\mathbf{W} \mathbf{h}_{t-1}+\mathbf{b}_{\mathbf{h}}\right) \\
 & y_t=\sigma\left(\mathbf{v}^T \mathbf{h}_t+b_y\right)
 \end{aligned}
-$$
+```
 
 where $\mathbf{x}\_t \in \mathbb{R}^2$, $\mathbf{U} \in \mathbb{R}^{3 \times 2}$, $\mathbf{W} \in \mathbb{R}^{3 \times 3}$, $\mathbf{b}_{\mathbf{h}} \in \mathbb{R}^3$, $\mathbf{v} \in \mathbb{R}^3$, and $b_y \in \mathbb{R}^2$.
 
