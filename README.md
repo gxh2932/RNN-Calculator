@@ -1,4 +1,4 @@
-Recurrent neural networks (RNNs) are universal Turing machines. This means that we can perform basic arithmetic using their architecture. The following is a toy example of how RNNs can be constructed to perform addition with handcrafted parameters.
+Recurrent neural networks (RNNs) can be purposed to act as calculators. The following is a toy example of how RNNs can be constructed to perform addition with handcrafted parameters.
 
 The input to the RNN will be two binary numbers, starting with the *least* significant bit. The longest binary number will be padded with an additional zero on the left side and the other number will also be padded with zeros such that they are both the same length. For instance, the equation
 
